@@ -1,0 +1,144 @@
+Microsoft Windows [版本 10.0.17134.345]
+(c) 2018 Microsoft Corporation。保留所有权利。
+
+C:\Windows\System32>mysql -u root -p
+Enter password: ******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 11
+Server version: 8.0.12 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use tongj2;
+Database changed
+mysql> create table sc(id int primary key not null unique auto_increment,name varchar(20) not null unique,money int(20));
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> desc sc;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(20) | NO   | UNI | NULL    |                |
+| money | int(20)     | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> alter table sc modify money int zerofill;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc sc;
++-------+---------------------------+------+-----+---------+----------------+
+| Field | Type                      | Null | Key | Default | Extra          |
++-------+---------------------------+------+-----+---------+----------------+
+| id    | int(11)                   | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(20)               | NO   | UNI | NULL    |                |
+| money | int(10) unsigned zerofill | YES  |     | NULL    |                |
++-------+---------------------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table sc add num int(20);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table sc add product varchar(20);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+       desc sc;
++---------+---------------------------+------+-----+---------+----------------+
+| Field   | Type                      | Null | Key | Default | Extra          |
++---------+---------------------------+------+-----+---------+----------------+
+| id      | int(11)                   | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(20)               | NO   | UNI | NULL    |                |
+| money   | int(10) unsigned zerofill | YES  |     | NULL    |                |
+| num     | int(20)                   | YES  |     | NULL    |                |
+| product | varchar(20)               | YES  |     | NULL    |                |
++---------+---------------------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into sc(id,name,money,num,product)values(1,'aarom',100,2,'shoes');
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into sc(name,money,num,product)values('joke',20,1,'t-shirt');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into sc(name,money,num,product)values('kris',400,3,'clothes');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from sc;
++----+-------+------------+------+---------+
+| id | name  | money      | num  | product |
++----+-------+------------+------+---------+
+|  1 | aarom | 0000000100 |    2 | shoes   |
+|  2 | joke  | 0000000020 |    1 | t-shirt |
+|  3 | kris  | 0000000400 |    3 | clothes |
++----+-------+------------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into sc(name,money,num,product)values('kk',300,3,'clothes shoes');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from sc;
++----+-------+------------+------+---------------+
+| id | name  | money      | num  | product       |
++----+-------+------------+------+---------------+
+|  1 | aarom | 0000000100 |    2 | shoes         |
+|  2 | joke  | 0000000020 |    1 | t-shirt       |
+|  3 | kris  | 0000000400 |    3 | clothes       |
+|  4 | kk    | 0000000300 |    3 | clothes shoes |
++----+-------+------------+------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> update sc set product="shoes" where id=1;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from sc;
++----+-------+------------+------+---------------+
+| id | name  | money      | num  | product       |
++----+-------+------------+------+---------------+
+|  1 | aarom | 0000000100 |    2 | shoes         |
+|  2 | joke  | 0000000020 |    1 | t-shirt       |
+|  3 | kris  | 0000000400 |    3 | clothes       |
+|  4 | kk    | 0000000300 |    3 | clothes shoes |
++----+-------+------------+------+---------------+
+4 rows in set (0.00 sec)
+
+mysql> alter table sc add isDelete int(1) default 0;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from sc;
++----+-------+------------+------+---------------+----------+
+| id | name  | money      | num  | product       | isDelete |
++----+-------+------------+------+---------------+----------+
+|  1 | aarom | 0000000100 |    2 | shoes         |        0 |
+|  2 | joke  | 0000000020 |    1 | t-shirt       |        0 |
+|  3 | kris  | 0000000400 |    3 | clothes       |        0 |
+|  4 | kk    | 0000000300 |    3 | clothes shoes |        0 |
++----+-------+------------+------+---------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> update sc set  isDelete=1 where id=1;
+Query OK, 1 row affected (0.07 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from sc;
++----+-------+------------+------+---------------+----------+
+| id | name  | money      | num  | product       | isDelete |
++----+-------+------------+------+---------------+----------+
+|  1 | aarom | 0000000100 |    2 | shoes         |        1 |
+|  2 | joke  | 0000000020 |    1 | t-shirt       |        0 |
+|  3 | kris  | 0000000400 |    3 | clothes       |        0 |
+|  4 | kk    | 0000000300 |    3 | clothes shoes |        0 |
++----+-------+------------+------+---------------+----------+
+4 rows in set (0.00 sec)
+
+mysql>
